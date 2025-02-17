@@ -3,44 +3,17 @@
 import { motion } from "motion/react";
 import { useJokes } from "@/hooks/useJokes";
 import { Loader } from "./Loader";
-import { useEditJoke } from "@/hooks/useEditForm";
-import { useEffect, useState } from "react";
+import { EditJokeForm } from "./EditJokeForm";
+import { ListEmojies } from "./ListEmojies";
+import { Login } from "./Login";
+import { useState } from "react";
+// import {Modal} from "./Modal";
+
 
 export const JokeCard = () => {
+const [isLogedInUser, setIsLogedInUser] = useState(false);
+
   const { joke, fetchNewJoke, isLoading, error, vote, mutate } = useJokes();
-
-  const { editJoke } = useEditJoke();
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedQuestion, setEditedQuestion] = useState(joke?.question);
-  const [editedAnswer, setEditedAnswer] = useState(joke?.answer);
-
-  useEffect(() => {
-    setEditedQuestion(joke?.question);
-    setEditedAnswer(joke?.answer)
-  }, [isEditing, joke?.answer, joke?.question]);
-  
-  if (error)
-    return (
-      <p className="text-center text-lg text-red-500">Failed to load joke</p>
-    );
-
-  
-const handleEdit = async () => {
-  if (!joke || !editedQuestion || !editedAnswer) return;
-  await editJoke(joke.id, editedQuestion, editedAnswer); // Edit the joke
-  setIsEditing(false); // Close the edit form
-
-  // Optimistic UI update - this will update the joke immediately in the UI without waiting for the response
-  mutate(
-    {
-      ...joke,
-      question: editedQuestion,
-      answer: editedAnswer,
-    },
-    false
-  );
-};
 
   if (error)
     return (
@@ -49,100 +22,53 @@ const handleEdit = async () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen ">
-      <div className="flex flex-col justify-between max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md text-center md:min-w-[512px] md:min-h-[280px]">
-        <motion.h2
-          key={joke?.question} // This ensures animation runs when value changes
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -20, opacity: 0 }}
-          transition={{ duration: 0.9 }}
-          className="text-2xl font-bold"
-        >
-          {joke?.question}
-        </motion.h2>
-        <motion.p
-          key={joke?.answer} // This ensures animation runs when value changes
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -20, opacity: 0 }}
-          transition={{ duration: 0.9, delay: 3 }}
-          className="mt-2 text-gray-600"
-        >
-          {joke?.answer}
-        </motion.p>
-        <div className="mt-4 flex flex-col justify-center gap-4">
-          <ul className="flex justify-center gap-2 w-full sm:gap-8">
-            {joke?.votes.map(
-              ({ label, value }: { label: string; value: number }, index) => {
-                return (
-                  <li key={index}>
-                    <button
-                      onClick={() => vote(label)}
-                      className="relative flex text-3xl bg-slate-200 rounded-md p-1 overflow-hidden hover:scale-110 transition-all duration-300 min-w-max"
-                    >
-                      {label}
-                      {value !== 0 && (
-                        <motion.span
-                          key={value} // This ensures animation runs when value changes
-                          initial={{ y: 20, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          exit={{ y: -20, opacity: 0 }}
-                          transition={{ duration: 0.5, delay: 0.4 }}
-                          className="mr-2"
-                        >
-                          {value}
-                        </motion.span>
-                      )}
-                    </button>
-                  </li>
-                );
-              }
-            )}
-          </ul>
-          <button
-            onClick={fetchNewJoke}
-            className="flex items-center justify-center mt-4 px-4 py-2 h-10 bg-blue-500 hover:bg-blue-600 transition-all active:scale-[99%] text-white rounded-lg"
+      <div className="flex flex-col items-center justify-center p-6 max-w-lg md:min-w-[512px] h-full">
+        <Login setIsLogedInUser={setIsLogedInUser} />
+        <div className="flex flex-col justify-between mx-auto bg-white rounded-lg shadow-md text-center w-full p-4 md:min-h-[280px]">
+          {/* Joke Content =============================== */}
+          <motion.h2
+            key={joke?.question} // This ensures animation runs when value changes
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.9 }}
+            className="text-2xl font-bold"
           >
-            {isLoading ? <Loader /> : "Next Joke"}
-          </button>
+            {joke?.question}
+          </motion.h2>
+          <motion.p
+            key={joke?.answer} // This ensures animation runs when value changes
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.9, delay: 3 }}
+            className="mt-2 text-gray-600"
+          >
+            {joke?.answer}
+          </motion.p>
+          <div className="mt-4 flex flex-col justify-center gap-4">
+            {/* List Emojies ============================= */}
+            <ListEmojies
+              joke={joke}
+              vote={vote}
+              isLogedInUser={isLogedInUser}
+            />
+
+            <button
+              onClick={fetchNewJoke}
+              className="flex items-center justify-center mt-4 px-4 py-2 h-10 bg-blue-500 hover:bg-blue-600 transition-all active:scale-[99%] text-white rounded-lg"
+            >
+              {isLoading ? <Loader /> : "Next Joke"}
+            </button>
+          </div>
+
+          {/* Edit Joke Form ============================== */}
+          <EditJokeForm joke={joke} mutate={mutate} />
         </div>
-        <div
-          className={`mt-2 transition-all duration-500 overflow-hidden  ${
-            isEditing
-              ? "h-44 opacity-100"
-              : "h-0 opacity-0 pointer-events-none"
-          }`}
-        >
-          {isEditing && (
-            <div className="max-w-lg mx-auto bg-white pt-6 rounded-lg shadow-md text-center">
-              <input
-                className="border p-2 w-full rounded-lg"
-                value={editedQuestion}
-                // defaultValue={joke?.question}
-                onChange={(e) => setEditedQuestion(e.target.value)}
-              />
-              <input
-                className="border p-2 w-full mt-2 rounded-lg"
-                value={editedAnswer}
-                onChange={(e) => setEditedAnswer(e.target.value)}
-              />
-              <button
-                onClick={handleEdit}
-                aria-labelledby=""
-                className="w-full mt-2 px-4 py-2 bg-green-500 text-white rounded-lg"
-              >
-                Save
-              </button>
-            </div>
-          )}
-        </div>
-       {!isEditing && <button
-          onClick={() => setIsEditing(true)}
-          className=" border-none underline"
-        >
-          Edit joke
-        </button>}
       </div>
+      {/* <Modal isOpen={isLogedInUser === false}>
+        <p>Please log in to vote.</p>
+      </Modal> */}
     </div>
   );
 };
