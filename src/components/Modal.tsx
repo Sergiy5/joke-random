@@ -15,7 +15,7 @@ export const Modal: React.FC<ModalProps> = ({ children, isOpen }) => {
   useEffect(() => {setIsVisible(isOpen)}, [isOpen]);
 
   return (
-    <div className={`relative flex items-center justify-center w-80 m-auto`}>
+    <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-80 m-auto`}>
       <AnimatePresence initial={false}>
         {isVisible ? (
           <motion.div
@@ -41,33 +41,3 @@ export const Modal: React.FC<ModalProps> = ({ children, isOpen }) => {
     </div>
   );
 };
-
-/**
- * ==============   Styles   ================
- */
-
-// const container: React.CSSProperties = {
-//   display: "flex",
-//   flexDirection: "column",
-//   width: 100,
-//   height: 160,
-//   position: "relative",
-// };
-
-// const box: React.CSSProperties = {
-//   width: 300,
-//   height: 300,
-//   backgroundColor: "#FFFFFF",
-//   borderRadius: "10px",
-// };
-
-// const button: React.CSSProperties = {
-//   backgroundColor: "#0cdcf7",
-//   borderRadius: "10px",
-//   padding: "10px 20px",
-//   color: "#0f1115",
-//   position: "absolute",
-//   bottom: 0,
-//   left: 0,
-//   right: 0,
-// };

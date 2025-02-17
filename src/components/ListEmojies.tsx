@@ -29,7 +29,7 @@ export const ListEmojies: React.FC<ListEmojiesProps> = ({
       setIsClickedNotLogin(true);
       setTimeout(() => {
         setIsClickedNotLogin(false);
-      }, 4000);
+      }, 3000);
     }
   };
 

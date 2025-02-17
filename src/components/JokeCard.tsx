@@ -42,7 +42,7 @@ const [isLogedInUser, setIsLogedInUser] = useState(false);
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.9, delay: 3 }}
-            className="mt-2 text-gray-600"
+            className="mt-2 text-gray-800 text-xl"
           >
             {joke?.answer}
           </motion.p>

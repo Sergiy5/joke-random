@@ -35,7 +35,7 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
               onClick={() => setIsLogining(true)}
               className="text-blue-500 hover:text-blue-400"
             >
-              login
+              log in
             </button>
             &nbsp;to be able to vote
           </div>
@@ -52,7 +52,7 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
                 name="username"
                 onChange={(e) => setUseName(e.target.value)}
                 placeholder="Enter your username"
-                className={`bg-gray-200 h-10 border-none outline-none rounded-lg p-4 w-full `}
+                className={`bg-gray-200 h-10 border-none outline-none rounded-lg p-4 md:w-full `}
               />
               <button
                 type="submit"
@@ -60,9 +60,9 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
                   login(useName);
                   setIsLogining(false);
                 }}
-                className="bg-green-500 text-white px-4 py-2 rounded"
+                className="bg-green-500 text-white px-4 py-2 w-24 rounded"
               >
-                Login
+                Log in
               </button>
             </>
           </div>
