@@ -15,6 +15,7 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
 
   useEffect(() => {
     setIsLogedInUser(!!user);
+    setUseName(user || "");
   }, [user, setIsLogedInUser]);
 
   return (
@@ -28,7 +29,7 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-center">
+          <div className="flex flex-wrap items-center justify-center">
             Please&nbsp;
             <button
               type="button"
@@ -40,13 +41,13 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
             &nbsp;to be able to vote
           </div>
           <div
-            className={`flex items-center justify-center transition-all duration-500 easy-in-out overflow-hidden ${
+            className={`flex items-center justify-center w-full transition-all duration-500 easy-in-out overflow-hidden ${
               isLogining
-                ? "h-10 opacity-100"
-                : "h-0 opacity-0 pointer-events-none"
+                ? "min-h-10 opacity-100"
+                : "min-h-0 h-0 opacity-0 pointer-events-none"
             }`}
           >
-            <>
+            <div className="flex items-center justify-center flex-wrap sm:flex-nowrap w-full">
               <input
                 type="text"
                 name="username"
@@ -64,7 +65,7 @@ export const Login: React.FC<LoginProps> = ({ setIsLogedInUser }) => {
               >
                 Log in
               </button>
-            </>
+            </div>
           </div>
         </>
       )}

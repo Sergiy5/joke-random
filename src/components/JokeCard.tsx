@@ -22,7 +22,7 @@ const [isLogedInUser, setIsLogedInUser] = useState(false);
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen ">
-      <div className="flex flex-col items-center justify-center p-6 max-w-lg md:min-w-[512px] h-full">
+      <div className="flex flex-col items-center justify-center p-6 w-full sm:max-w-[556px] h-full">
         <Login setIsLogedInUser={setIsLogedInUser} />
         <div className="flex flex-col justify-between mx-auto bg-white rounded-lg shadow-md text-center w-full p-4 md:min-h-[280px]">
           {/* Joke Content =============================== */}
