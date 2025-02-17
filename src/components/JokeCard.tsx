@@ -26,12 +26,21 @@ export const JokeCard = () => {
     );
 
   
-  const handleEdit = async () => {
-    if (!joke || !editedQuestion || !editedAnswer) return;
-    await editJoke(joke.id, editedQuestion, editedAnswer);
-    setIsEditing(false);
-    mutate(); // Refresh joke
-  };
+const handleEdit = async () => {
+  if (!joke || !editedQuestion || !editedAnswer) return;
+  await editJoke(joke.id, editedQuestion, editedAnswer); // Edit the joke
+  setIsEditing(false); // Close the edit form
+
+  // Optimistic UI update - this will update the joke immediately in the UI without waiting for the response
+  mutate(
+    {
+      ...joke,
+      question: editedQuestion,
+      answer: editedAnswer,
+    },
+    false
+  );
+};
 
   if (error)
     return (
@@ -97,41 +106,42 @@ export const JokeCard = () => {
             {isLoading ? <Loader /> : "Next Joke"}
           </button>
         </div>
-        <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md text-center">
-          {isEditing ? (
-            <>
+        <div
+          className={`mt-2 transition-all duration-500 overflow-hidden  ${
+            isEditing
+              ? "h-44 opacity-100"
+              : "h-0 opacity-0 pointer-events-none"
+          }`}
+        >
+          {isEditing && (
+            <div className="max-w-lg mx-auto bg-white pt-6 rounded-lg shadow-md text-center">
               <input
-                className="border p-2 w-full"
+                className="border p-2 w-full rounded-lg"
                 value={editedQuestion}
                 // defaultValue={joke?.question}
                 onChange={(e) => setEditedQuestion(e.target.value)}
               />
               <input
-                className="border p-2 w-full mt-2"
+                className="border p-2 w-full mt-2 rounded-lg"
                 value={editedAnswer}
-                // defaultValue={joke?.answer}
                 onChange={(e) => setEditedAnswer(e.target.value)}
               />
               <button
                 onClick={handleEdit}
-                className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg"
+                aria-labelledby=""
+                className="w-full mt-2 px-4 py-2 bg-green-500 text-white rounded-lg"
               >
                 Save
               </button>
-            </>
-          ) : (
-            <>
-              {/* <h2 className="text-2xl font-bold">{joke?.question}</h2>
-              <p className="mt-2 text-gray-600">{joke?.answer}</p> */}
-              <button
-                onClick={() => setIsEditing(true)}
-                className="mt-2 px-4 py-2 bg-yellow-500 text-white rounded-lg"
-              >
-                Edit
-              </button>
-            </>
+            </div>
           )}
         </div>
+       {!isEditing && <button
+          onClick={() => setIsEditing(true)}
+          className=" border-none underline"
+        >
+          Edit joke
+        </button>}
       </div>
     </div>
   );

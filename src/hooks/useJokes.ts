@@ -9,7 +9,7 @@ const API_URL = "http://localhost:5000/api";
 // Fetcher function for SWR
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-interface IJoke {
+export interface IJoke {
   id: string;
   question: string;
   answer: string;
