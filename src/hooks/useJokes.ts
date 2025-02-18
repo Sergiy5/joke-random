@@ -4,7 +4,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-const API_URL = "http://localhost:5000/api";
+// const API_URL = "http://localhost:5000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Fetcher function for SWR
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -40,6 +41,8 @@ export const useJokes = () => {
     setIsLoading(true);
     try {
       const { data: newJoke } = await axios.get(`${API_URL}/fetch-joke`);
+
+      console.log("newJoke_>>>>>>>>>>>>>>", newJoke);
       mutate(newJoke, false); // Optimistic update
     } catch (error) {
       console.error("Failed to fetch a new joke:", error);

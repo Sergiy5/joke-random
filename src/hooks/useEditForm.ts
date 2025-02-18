@@ -2,7 +2,9 @@ import { useSWRConfig } from "swr";
 import axios from "axios";
 import { IJoke } from "./useJokes";
 
-const API_URL = "http://localhost:5000/api";
+// const API_URL = "http://localhost:5000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 
 export const useEditJoke = () => {
   const { mutate } = useSWRConfig(); // ✅ Fix: useSWRConfig correctly
@@ -34,25 +36,3 @@ export const useEditJoke = () => {
 
   return { editJoke };
 };
-
-// import axios from "axios";
-// import { useSWRConfig } from "swr";
-
-// const API_URL = "http://localhost:5000/api";
-
-// export const useEditJoke = () => {
-//   const mutate = useSWRConfig().mutate; // Refresh data after editing
-
-//  const editJoke = async (id: string, question: string, answer: string) => {
-//    // ✅ Send updated joke to backend
-//    const { data: updatedJoke } = await axios.put(`${API_URL}/joke/${id}`, {
-//      question,
-//      answer,
-//    });
-
-//    // ✅ Update cache immediately with new joke (no refetch)
-//    mutate(`${API_URL}/fetch-joke`, updatedJoke, false);
-//  };
-
-//   return { editJoke };
-// };
