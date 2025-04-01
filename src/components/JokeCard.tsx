@@ -7,11 +7,9 @@ import { EditJokeForm } from "./EditJokeForm";
 import { ListEmojies } from "./ListEmojies";
 import { Login } from "./Login";
 import { useState } from "react";
-// import {Modal} from "./Modal";
-
 
 export const JokeCard = () => {
-const [isLogedInUser, setIsLogedInUser] = useState(false);
+  const [isLogedInUser, setIsLogedInUser] = useState(false);
 
   const { joke, fetchNewJoke, isLoading, error, vote, mutate } = useJokes();
 
@@ -66,9 +64,6 @@ const [isLogedInUser, setIsLogedInUser] = useState(false);
           <EditJokeForm joke={joke} mutate={mutate} />
         </div>
       </div>
-      {/* <Modal isOpen={isLogedInUser === false}>
-        <p>Please log in to vote.</p>
-      </Modal> */}
     </div>
   );
 };
